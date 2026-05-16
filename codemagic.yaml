@@ -4,23 +4,15 @@ workflows:
     environment:
       node: latest
     scripts:
-      # 解压 src.zip
       - name: Unzip src folder
         script: |
           unzip -o src.zip -d ./
       - name: Install dependencies
         script: |
           npm install
-      - name: Prebuild native projects
+      - name: Build with EAS
         script: |
-          npx expo prebuild --platform ios
-      # 自动获取 Scheme 名称并构建IPA
-      - name: Build IPA
-        script: |
-          cd ios
-          pod install
-          SCHEME_NAME=$(xcodebuild -list -json | jq -r '.workspace.schemes[0]')
-          xcodebuild archive -workspace *.xcworkspace -scheme "$SCHEME_NAME" -configuration Release -archivePath build/app.xcarchive
-          xcodebuild -exportArchive -archivePath build/app.xcarchive -exportPath build/ios/ipa -exportOptionsPlist ../exportOptions.plist
+          npm install -g eas-cli
+          eas build --platform ios --profile preview --non-interactive
     artifacts:
-      - build/ios/ipa/*.ipa
+      - build/*.ipa
