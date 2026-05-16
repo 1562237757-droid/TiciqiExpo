@@ -4,7 +4,7 @@ workflows:
     environment:
       node: latest
     scripts:
-      # 第一步：解压你上传的 src.zip
+      # 解压你上传的 src.zip
       - name: Unzip src folder
         script: |
           unzip -o src.zip -d ./
@@ -14,8 +14,12 @@ workflows:
       - name: Prebuild native projects
         script: |
           npx expo prebuild --platform ios
+      # 用 Expo Run 命令构建IPA
       - name: Build IPA
         script: |
-          npx expo build:ios --non-interactive --no-pwa
+          cd ios
+          pod install
+          xcodebuild archive -workspace *.xcworkspace -scheme TiciqiExpo -configuration Release -archivePath build/TiciqiExpo.xcarchive
+          xcodebuild -exportArchive -archivePath build/TiciqiExpo.xcarchive -exportPath build/ios/ipa -exportOptionsPlist ../exportOptions.plist
     artifacts:
       - build/ios/ipa/*.ipa
