@@ -3,6 +3,7 @@ workflows:
     name: Build iOS
     environment:
       node: latest
+      xcode: latest
     scripts:
       - name: Install dependencies
         script: |
@@ -10,8 +11,8 @@ workflows:
       - name: Prebuild native projects
         script: |
           npx expo prebuild --platform ios
-      - name: Build iOS IPA
+      - name: Build IPA with Expo
         script: |
-          cd ios && xcodebuild -workspace *.xcworkspace -scheme $(xcodebuild -list -json | jq -r '.workspace.schemes[0]') -configuration Release -sdk iphoneos build
+          npx expo run:ios --configuration Release
     artifacts:
       - build/ios/ipa/*.ipa
