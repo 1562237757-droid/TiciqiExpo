@@ -1,0 +1,19 @@
+# 工作流名称，可以随便起
+workflows:
+  build-ios:
+    name: Build iOS
+    # 指定构建环境
+    environment:
+      node: latest
+    # 构建脚本
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+      - name: Prebuild native projects
+        script: |
+          npx expo prebuild --platform ios
+    # 指定要生成的产物
+    artifacts:
+      # 关键：告诉 Codemagic 把 .ipa 文件提供给我们
+      - build/ios/ipa/*.ipa

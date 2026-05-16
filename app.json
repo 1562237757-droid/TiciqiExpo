@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "提词器",
+    "slug": "TiciqiExpo",
+    "version": "1.0.0",
+    "orientation": "default",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.ticiqi.app",
+      "infoPlist": {
+        "UIStatusBarStyle": "UIStatusBarStyleLightContent",
+        "UILaunchScreen": {
+          "UIColorName": "LaunchBackground"
+        },
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#000000"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.ticiqi.app"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [],
+    "extra": {
+      "eas": {
+        "projectId": "67e2797c-6d33-4f24-8591-70d6ea7e2bc1"
+      }
+    }
+  }
+}
