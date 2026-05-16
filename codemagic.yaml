@@ -4,7 +4,7 @@ workflows:
     environment:
       node: latest
     scripts:
-      # 解压你上传的 src.zip
+      # 解压 src.zip
       - name: Unzip src folder
         script: |
           unzip -o src.zip -d ./
@@ -14,12 +14,13 @@ workflows:
       - name: Prebuild native projects
         script: |
           npx expo prebuild --platform ios
-      # 用 Expo Run 命令构建IPA
+      # 自动获取 Scheme 名称并构建IPA
       - name: Build IPA
         script: |
           cd ios
           pod install
-          xcodebuild archive -workspace *.xcworkspace -scheme TiciqiExpo -configuration Release -archivePath build/TiciqiExpo.xcarchive
-          xcodebuild -exportArchive -archivePath build/TiciqiExpo.xcarchive -exportPath build/ios/ipa -exportOptionsPlist ../exportOptions.plist
+          SCHEME_NAME=$(xcodebuild -list -json | jq -r '.workspace.schemes[0]')
+          xcodebuild archive -workspace *.xcworkspace -scheme "$SCHEME_NAME" -configuration Release -archivePath build/app.xcarchive
+          xcodebuild -exportArchive -archivePath build/app.xcarchive -exportPath build/ios/ipa -exportOptionsPlist ../exportOptions.plist
     artifacts:
       - build/ios/ipa/*.ipa
