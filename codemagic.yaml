@@ -13,11 +13,10 @@ workflows:
       - name: Install EAS CLI
         script: |
           npm install -g eas-cli
-      - name: Log in to Expo
-        script: |
-          echo "$EXPO_TOKEN" | eas login --token
+      # 注意：这里不要写 "Log in to Expo" 这步
+      # 因为 EAS 会自动读取你在网页上设置好的 EXPO_TOKEN
       - name: Build with EAS
         script: |
-          eas build --platform ios --profile preview --non-interactive
+          eas build --platform ios --profile development --non-interactive
     artifacts:
-      - build/*.ipa
+      - build/ios/ipa/*.ipa
