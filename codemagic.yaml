@@ -10,9 +10,14 @@ workflows:
       - name: Install dependencies
         script: |
           npm install
-      - name: Build with EAS
+      - name: Install EAS CLI
         script: |
           npm install -g eas-cli
+      - name: Log in to Expo
+        script: |
+          echo "$EXPO_TOKEN" | eas login --token
+      - name: Build with EAS
+        script: |
           eas build --platform ios --profile preview --non-interactive
     artifacts:
       - build/*.ipa
