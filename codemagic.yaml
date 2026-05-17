@@ -7,14 +7,22 @@ workflows:
       - name: Unzip src folder
         script: |
           unzip -o src.zip -d ./
+      - name: Verify directory structure
+        script: |
+          ls -la
+          # 自动进入解压后的第一个子目录（如果有的话）
+          if [ ! -f package.json ]; then
+            echo "package.json not found in current directory. Trying to enter subfolder..."
+            cd $(ls -d */ | head -n 1)
+            echo "Now in folder: $(pwd)"
+            ls -la
+          fi
       - name: Install dependencies
         script: |
           npm install
       - name: Install EAS CLI
         script: |
           npm install -g eas-cli
-      # 注意：这里不要写 "Log in to Expo" 这步
-      # 因为 EAS 会自动读取你在网页上设置好的 EXPO_TOKEN
       - name: Build with EAS
         script: |
           eas build --platform ios --profile development --non-interactive
