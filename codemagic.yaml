@@ -5,15 +5,29 @@ workflows:
     environment:
       node: latest
     scripts:
-      # 安装依赖
+      # 打印根目录文件，确认入口文件存在
+      - name: Check root files
+        script: |
+          echo "===== 根目录文件 ====="
+          ls -la
+          echo "===== 检查 App.tsx ====="
+          cat App.tsx
+          echo "===== 检查 index.ts ====="
+          cat index.ts
+
+      # 安装依赖，强制兼容模式
       - name: Install dependencies
         script: |
           npm install --legacy-peer-deps
 
-      # 生成 iOS 项目
+      # 生成 iOS 项目，强制指定入口文件
       - name: Prebuild iOS project
         script: |
-          npx expo prebuild --platform ios --no-install --clean
+          echo "===== 开始 prebuild ====="
+          # 强制指定入口文件，避免找不到入口的问题
+          npx expo prebuild --platform ios --no-install --clean --entry-file App.tsx --verbose
+          echo "===== prebuild 完成，检查 ios 目录 ====="
+          ls -la ios/ || echo "⚠️  ios 目录不存在！"
 
       # 编译无签名 IPA
       - name: Build unsigned IPA
