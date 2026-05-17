@@ -5,33 +5,25 @@ workflows:
     environment:
       node: latest
     scripts:
-      # 1. 解压 src.zip
-      - name: Unzip source code
-        script: |
-          unzip -o src.zip -d ./
-          ls -la  # 打印目录结构，方便排查
-
-      # 2. 安装依赖
+      # 安装依赖
       - name: Install dependencies
         script: |
-          npm install
+          npm install --legacy-peer-deps
 
-      # 3. 强制生成标准 iOS 项目
+      # 生成 iOS 项目
       - name: Prebuild iOS project
         script: |
-          npx expo prebuild --platform ios --no-install
-          cd ios
-          pod install --repo-update
-          ls -la  # 确认项目文件生成
+          npx expo prebuild --platform ios --no-install --clean
 
-      # 4. 直接用 Expo 生成的标准 scheme 编译
+      # 编译无签名 IPA
       - name: Build unsigned IPA
         script: |
           cd ios
-          # 直接指定 Expo 默认的 scheme 和 workspace
+          WORKSPACE=$(ls *.xcworkspace)
+          SCHEME=$(basename "$WORKSPACE" .xcworkspace)
           xcodebuild build \
-            -workspace TiciqiExpo.xcworkspace \
-            -scheme TiciqiExpo \
+            -workspace "$WORKSPACE" \
+            -scheme "$SCHEME" \
             -configuration Release \
             -sdk iphoneos \
             CODE_SIGN_IDENTITY="" \
